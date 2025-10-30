@@ -52,4 +52,49 @@ public class CambioMonedaServicio {
                 .collect(Collectors.toMap(CambioMoneda::getFecha, CambioMoneda::getCambio));
     }
 
+    public static double getPromedio(List<Double> datos) {
+        return datos.isEmpty() ? 0
+                : datos.stream()
+                        .mapToDouble(Double::doubleValue)
+                        .average()
+                        .orElse(0);
+    }
+
+    public static double getDesviacionEstandar(List<Double> datos) {
+        var promedio = getPromedio(datos);
+        return datos.isEmpty() ? 0
+                : Math.sqrt(datos.stream()
+                        .mapToDouble(dato -> Math.pow(dato - promedio, 2))
+                        .average()
+                        .orElse(0));
+    }
+
+    public static double getMaximo(List<Double> datos) {
+        return datos.isEmpty() ? 0
+                : datos.stream()
+                        .mapToDouble(Double::doubleValue)
+                        .max()
+                        .orElse(0);
+    }
+
+    public static double getMinimo(List<Double> datos) {
+        return datos.isEmpty() ? 0
+                : datos.stream()
+                        .mapToDouble(Double::doubleValue)
+                        .min()
+                        .orElse(0);
+    }
+
+    public static double getMediana(List<Double> datos) {
+        if (datos.isEmpty())
+            return 0;
+
+        var datosOrdenados = datos.stream()
+                .sorted()
+                .collect(Collectors
+                        .toList());
+        var n = datosOrdenados.size();
+        return n % 2 == 0 ? (datosOrdenados.get(n / 2 - 1) + datosOrdenados.get(n / 2)) / 2 : datosOrdenados.get(n / 2);
+    }
+
 }
